@@ -31,3 +31,24 @@ Use `adding-a-feature` for functional parity and `frontend-design` for a user-fa
 Before building common workspace or agent UI, read `agent-native-toolkit`; for supported customization, read `customizing-agent-native`.
 
 - Guarded verification: run `pnpm agent-native:doctor`; fix findings before done.
+
+## Veridom Bids
+
+Compare contractor quotes for one renovation job against the owner's own scope. `/bids` lists projects; `/bids/:projectId` is the price comparison (Preisspiegel). On that page `navigation.projectId` is set.
+
+- Scope items are the owner's positions; every quote line is mapped to one scope item or null (extras). Never invent prices or quantities: leave unknown values null and say so.
+- German quote words: `bauseits`/`nicht enthalten` → coverage `excluded`; `Alternativposition`/`Eventualposition` → `optional`; `psch` → lump sum; `Stk` → pcs; amounts `exkl. USt` are net.
+- Checks are deterministic and run after every write: missing/excluded required items are priced at the benchmark midpoint (or the other quotes' median), short quantities, prices outside the benchmark. `adjustedNet` = quoted net + gap cost. Settled check flags are not raised again.
+- Questions go to the contractor in their quote's language and stay drafts until the owner approves them. Do not send anything.
+
+| Action | Purpose |
+|---|---|
+| get-price-comparison | Full comparison incl. totals |
+| read-quote-text | Raw text of one quote |
+| update-quote | Header: net total, VAT, terms, warranty, dates |
+| record-quote-lines | All positions of one quote in one batch |
+| update-quote-line | Correct one line |
+| save-scope-items | Add/update scope and benchmarks |
+| raise-flag | Judgement the checks can't see |
+| save-questions | Draft contractor questions |
+| create-demo-project | Demo bathroom with illustrative benchmarks |
