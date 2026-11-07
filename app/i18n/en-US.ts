@@ -1,6 +1,7 @@
 const messages = {
   bids: {
     "fair": "fair",
+    "yourEdits": "your edits",
     "nav": "Quotes",
     "indexTitle": "Compare renovation quotes",
     "indexLead": "Upload every contractor's quote. The agent reads each one, lines it up against your own scope, prices the gaps, and drafts the questions to send. You check and correct everything in the same table.",

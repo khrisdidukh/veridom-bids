@@ -42,7 +42,9 @@ export default defineAction({
     await getDb().transaction(async (tx) => {
       if (replace) await tx.delete(bl).where(and(eq(bl.bidId, bid.id), eq(bl.editedBy, "agent")));
       await tx.insert(bl).values(
-        lines.map((l) => ({
+        lines.map((l) => {
+          const total = l.total ?? (l.unitPrice != null && l.quantity != null ? Math.round(l.unitPrice * l.quantity * 100) / 100 : null);
+          return {
           id: crypto.randomUUID(),
           bidId: bid.id,
           projectId: project.id,
@@ -52,13 +54,15 @@ export default defineAction({
           quantity: l.quantity ?? null,
           unit: l.unit ?? null,
           unitPrice: l.unitPrice ?? null,
-          total: l.total ?? (l.unitPrice != null && l.quantity != null ? Math.round(l.unitPrice * l.quantity * 100) / 100 : null),
+          total,
           coverage: l.coverage,
           note: l.note ?? null,
+          originalContribution: l.coverage === "included" ? (total ?? 0) : 0,
           editedBy: "agent" as const,
           ownerEmail,
           orgId: project.orgId,
-        })),
+          };
+        }),
       );
       if (bid.status === "received") await tx.update(schema.bids).set({ status: "extracted" }).where(eq(schema.bids.id, bid.id));
     });

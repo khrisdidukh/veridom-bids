@@ -99,6 +99,7 @@ type Totals = {
   bidId: string;
   quotedNet: number | null;
   linesSum: number;
+  ownerAdjustment: number;
   gapCost: number;
   unpricedGaps: number;
   adjustedNet: number | null;
@@ -373,6 +374,12 @@ function VerdictCard({
           </div>
           <p className="text-xs tabular-nums text-muted-foreground">
             {t("bids.quoted")} {eur(bid.quotedNet)}
+            {totals?.ownerAdjustment ? (
+              <span className="whitespace-nowrap text-emerald-700 dark:text-emerald-400">
+                {" "}
+                {totals.ownerAdjustment < 0 ? "−" : "+"} {eur(Math.abs(totals.ownerAdjustment))} {t("bids.yourEdits")}
+              </span>
+            ) : null}
             {gap > 0 ? (
               <span className="whitespace-nowrap text-amber-700 dark:text-amber-400"> + {eur(gap)} {t("bids.toComplete")}</span>
             ) : null}

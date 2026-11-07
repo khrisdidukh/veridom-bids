@@ -136,11 +136,24 @@ export function computeComparison(scope: Scope[], bids: Bid[], lines: Line[]) {
     let gapCost = 0;
     let unpricedGaps = 0;
 
+    // Owner corrections (a negotiated price, a position now included) move
+    // the paper total by the difference against what the quote said.
+    const ownerAdjustment = round(
+      own.reduce(
+        (s, l) =>
+          l.originalContribution == null
+            ? s
+            : s + (l.coverage === "included" ? lineTotal(l) : 0) - l.originalContribution,
+        0,
+      ),
+    );
+
     if (bid.status === "received") {
       return {
         bidId: bid.id,
         quotedNet: bid.quotedNet,
         linesSum,
+        ownerAdjustment: 0,
         gapCost: 0,
         unpricedGaps: 0,
         adjustedNet: bid.quotedNet,
@@ -219,11 +232,12 @@ export function computeComparison(scope: Scope[], bids: Bid[], lines: Line[]) {
       }
     }
 
-    const base = bid.quotedNet ?? linesSum;
+    const base = bid.quotedNet != null ? bid.quotedNet + ownerAdjustment : linesSum;
     return {
       bidId: bid.id,
       quotedNet: bid.quotedNet,
       linesSum,
+      ownerAdjustment,
       gapCost: round(gapCost),
       unpricedGaps,
       adjustedNet: round(base + gapCost),

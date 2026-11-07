@@ -91,6 +91,9 @@ export const bidLines = pgTable("bid_lines", {
     .notNull()
     .default("included"),
   note: text("note"),
+  // What this line added to the quoted total when it was read, so owner edits
+  // show up as a change against the paper total.
+  originalContribution: doublePrecision("original_contribution"),
   editedBy: text("edited_by", { enum: ["agent", "user"] })
     .notNull()
     .default("agent"),

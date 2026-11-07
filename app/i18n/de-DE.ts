@@ -1,6 +1,7 @@
 const messages = {
   bids: {
     "fair": "fair",
+    "yourEdits": "Ihre Änderungen",
     "nav": "Angebote",
     "indexTitle": "Sanierungsangebote vergleichen",
     "indexLead": "Laden Sie die Angebote aller Firmen hoch. Der Agent liest jedes Angebot, ordnet es Ihrem Leistungsumfang zu, bepreist die Lücken und entwirft die Rückfragen. Sie prüfen und korrigieren alles in derselben Tabelle.",

@@ -117,6 +117,11 @@ CREATE INDEX IF NOT EXISTS bid_lines_project_idx ON bid_lines (project_id);
 CREATE INDEX IF NOT EXISTS bid_flags_project_idx ON bid_flags (project_id, bid_id, status);
 CREATE INDEX IF NOT EXISTS bid_questions_project_idx ON bid_questions (project_id, bid_id)`,
     },
+    {
+      version: 2,
+      name: "bid-lines-original-contribution",
+      sql: `ALTER TABLE bid_lines ADD COLUMN IF NOT EXISTS original_contribution DOUBLE PRECISION`,
+    },
   ],
   { table: "veridom_bids_migrations" },
 );
