@@ -31,3 +31,7 @@ services:
         value: ai-sdk:openai
       - key: AGENT_MODEL
         value: anthropic/claude-haiku-5-5
+      # A Render web service is a long-lived Node process, not a serverless
+      # function with a ~40 s wall, so reading three quotes runs in one go.
+      - key: AGENT_RUN_SOFT_TIMEOUT_MS
+        value: "0"
